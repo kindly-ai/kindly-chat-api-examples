@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <title>Scroll adventure</title>
+    <meta charset="utf-8">
+    <meta content="width=device-width,initial-scale=1" name="viewport" />
+    <link href="https://fonts.googleapis.com/css?family=Playfair+Display&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --main-bg-color: white;
+            --main-color: #222;
+        }
+        body,html {
+            margin: 0;
+            padding: 0;
+            color: var(--main-color);
+            background: var(--main-bg-color);
+            overflow-x: hidden;
+            height: 100%;
+            width: 100%;
+        }
+        body {
+            margin-top: 1rem;
+            font-size: 2rem;
+            font-family: 'Playfair Display', sans-serif;
+        }
+        p {
+            width: 700px;
+            margin: 0 auto;
+        }
+        .rotate {
+            animation:spin 2s linear infinite;
+        }
+        @keyframes spin { 100% { transform:rotate(360deg);} }
+    </style>
+</head>
+<body>
+<div class="container">
+    <p id="text">
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean finibus consequat lacus eget luctus. Nam in ultricies ex.
+        Integer sagittis bibendum enim, vitae congue tellus. Nullam justo augue, aliquet vel elementum nec, bibendum maximus arcu.
+        Phasellus sit amet imperdiet eros. Vestibulum eleifend egestas odio posuere consequat. Fusce cursus congue augue, ac luctus massa. Maecenas et ipsum erat.
+        Morbi ultrices eros at pellentesque dignissim. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.
+        Aenean ac odio sed urna finibus volutpat.
+    </p>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/lax.js?" ></script>
+<script>
+  // Kindly Chat settings
+  let root = document.documentElement;
+
+  const BLUE_EXCHANGE_ID = '2699ffcb-769d-4c2e-89e3-6af2e7982443';
+  const HAPPY_EXCHANGE_ID = '567249af-c879-45ec-a6f9-af23c4c30d4b';
+  window.kindlyOptions = {
+    onMessage: (newMessage, chatLog) => {
+      const dialogueId = newMessage.exchange_id;
+
+      if (dialogueId === BLUE_EXCHANGE_ID) {
+        root.style.setProperty('--main-bg-color', 'rgb(0, 105, 255)');
+        root.style.setProperty('--main-color', 'rgb(188,238,255)');
+        document.getElementById('text').classList.remove('rotate')
+      } else if(dialogueId === HAPPY_EXCHANGE_ID) {
+        root.style.setProperty('--main-bg-color', 'rgb(255,94,223)');
+        root.style.setProperty('--main-color', 'rgb(255,255,255)');
+        document.getElementById('text').classList.add('rotate')
+      }
+    }
+  }
+</script>
+<script id="kindly-chat" src="https://chat.kindlycdn.com/kindly-chat.js?" data-bot-key="99de928b-898d-4f6c-a216-1098eb1154f7" async></script>
+</body>
+</html>
