@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <title>Trigger on correct path</title>
+  <meta charset="utf-8">
+  <meta content="width=device-width,initial-scale=1" name="viewport" />
+  <link href="https://fonts.googleapis.com/css?family=Playfair+Display&display=swap" rel="stylesheet">
+  <style>
+    body,
+    html {
+      margin: 0;
+      padding: 0;
+      overflow-x: hidden;
+      height: 100%;
+      width: 100%;
+    }
+
+    body {
+      margin-top: 1rem;
+      font-size: 2rem;
+      font-family: 'Playfair Display', sans-serif;
+    }
+
+    p {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+    <p id="text">
+      Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aenean finibus consequat lacus eget luctus. Nam in
+      ultricies ex.
+      Integer sagittis bibendum enim, vitae congue tellus. Nullam justo augue, aliquet vel elementum nec, bibendum
+      maximus arcu.
+      Phasellus sit amet imperdiet eros. Vestibulum eleifend egestas odio posuere consequat. Fusce cursus congue augue,
+      ac luctus massa. Maecenas et ipsum erat.
+      Morbi ultrices eros at pellentesque dignissim. Class aptent taciti sociosqu ad litora torquent per conubia nostra,
+      per inceptos himenaeos.
+      Aenean ac odio sed urna finibus volutpat.<br />
+      <button id="change-path" type="button">Change path</button>
+    </p>
+  </div>
+
+  <script>
+    // Kindly Chat settings
+    const BLUE_EXCHANGE_ID = '2699ffcb-769d-4c2e-89e3-6af2e7982443';
+    const HAPPY_EXCHANGE_ID = '567249af-c879-45ec-a6f9-af23c4c30d4b';
+
+    // Mapping from path regex to dialogue ID
+    const pathRegexToDialogue = [
+      ['/happy', HAPPY_EXCHANGE_ID],
+    ];
+
+    // Listen for push state events
+    var pushState = history.pushState;
+    history.pushState = function () {
+      pushState.apply(history, arguments);
+      triggerOnPath();
+    };
+    // Listen for pop state events
+    window.addEventListener('popstate', triggerOnPath);
+
+    // Let button trigger path
+    const btn = document.getElementById('change-path');
+    btn.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.history.pushState({}, '', '/happy');
+    })
+
+    function triggerOnPath() {
+      console.log('location:', window.location.pathname);
+
+      const match = pathRegexToDialogue.find((x) => { return new RegExp(x[0]).test(window.location.pathname) })
+      if (match) {
+        console.log("it's a match!")
+        kindlyChat.triggerDialogue(match[1]);
+      } else {
+        console.log('no match')
+      }
+    }
+    window.kindlyOptions = {
+      onLoad: triggerOnPath
+    }
+  </script>
+  <script id="kindly-chat" src="https://chat.kindlycdn.com/kindly-chat.js?"
+    data-bot-key="99de928b-898d-4f6c-a216-1098eb1154f7" async></script>
+</body>
+
+</html>
